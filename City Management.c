@@ -5,6 +5,7 @@
 
 void addCity(char cities[][50], int *count);
 void displayCities(char cities[][50], int count);
+void renameCity(char cities[][50], int count);
 
 
 
@@ -65,6 +66,68 @@ void addCity(char cities[][50], int *count) {
 
 
 
+
+                                                    // Rename city
+
+void renameCity(char cities[][50], int count) {
+    if(count == 0) {
+        printf("No cities to rename.\n");
+
+    }else{
+
+        int cityNumber;
+
+        printf("Enter city number to rename : ");
+        scanf("%d", &cityNumber);
+
+        if (cityNumber < 1 || cityNumber > count){
+            printf("Invalid city number.\n");
+        }else{
+
+            char newName[50];
+            int unique = 1;
+            printf("Enter new name:");
+            scanf("%s",newName);
+
+            for (int i = 0; i < count; i++) {
+                int notUnique = 1;
+                int j = 0;
+
+                while (cities[i][j] != '\0' && newName[j] != '\0') {
+                    if (cities[i][j] != newName[j]) {
+                    notUnique = 0;
+                    break;
+                    }
+                    j++;
+                }
+
+                if (cities[i][j] != newName[j]){
+                        notUnique = 0;
+                }
+
+                if (notUnique){
+                        unique = 0;
+                        break;
+                }
+            }
+
+        if (unique) {
+            int k = 0;
+            while (newName[k] != '\0') {
+            cities[cityNumber - 1][k] = newName[k];
+            k++;
+            }
+            cities[cityNumber - 1][k] = '\0';
+                printf("City renamed successfully!\n");
+        } else {
+        printf("City name already exists!\n");
+        }
+        }
+        }
+
+}
+
+
                                                 // Display Cities
 
 
@@ -115,6 +178,7 @@ int main() {
                     addCity(cities,&count);
                     break;
             case 2:
+                    renameCity(cities,count);
 
                     break;
             case 3:
