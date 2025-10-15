@@ -4,6 +4,7 @@
 
 
 void addCity(char cities[][50], int *count);
+void displayCities(char cities[][50], int count);
 
 
 
@@ -64,8 +65,28 @@ void addCity(char cities[][50], int *count) {
 
 
 
+                                                // Display Cities
 
 
+void displayCities(char cities[][50], int count) {
+
+    if (count == 0) {
+        printf("No cities to display.\n");
+    }else{
+
+        printf("\n_ _ _ City List _ _ _\n");
+
+        for (int i = 0; i < count; i++) {
+            int j = 0;
+            printf("%d . ",i + 1);
+            while(cities[i][j] != '\0') {
+                putchar(cities[i][j]);
+                j++;
+            }
+        printf("\n");
+        }
+    }
+}
 
 
 
@@ -100,6 +121,7 @@ int main() {
 
                     break;
             case 4:
+                    displayCities(cities,count);
                     break;
             case 5:
                     return 0;
