@@ -4,8 +4,10 @@
 
 
 void addCity(char cities[][50], int *count);
-void displayCities(char cities[][50], int count);
 void renameCity(char cities[][50], int count);
+void removeCity(char cities[][50], int *count);
+void displayCities(char cities[][50], int count);
+
 
 
 
@@ -127,6 +129,37 @@ void renameCity(char cities[][50], int count) {
 
 }
 
+                                            // Remove city
+
+void removeCity(char cities[][50], int *count) {
+
+    if (*count == 0) {
+        printf("No cities to remove.\n");
+    }else{
+
+        int cityNumber;
+        printf("Enter city number to remove :");
+        scanf("%d",&cityNumber);
+
+        if (cityNumber < 1 || cityNumber > *count) {
+                printf("Invalid city number.\n");
+        }else{
+
+            for (int i = cityNumber - 1; i < *count - 1; i++) {
+                int j = 0;
+                while (cities[i + 1][j] != '\0') {
+                cities[i][j] = cities[i + 1][j];
+                j++;
+                }
+            cities[i][j] = '\0';
+            }
+
+            (*count)--;
+            printf("City removed successfully!\n");
+        }
+    }
+}
+
 
                                                 // Display Cities
 
@@ -179,10 +212,9 @@ int main() {
                     break;
             case 2:
                     renameCity(cities,count);
-
                     break;
             case 3:
-
+                    removeCity(cities,&count);
                     break;
             case 4:
                     displayCities(cities,count);
