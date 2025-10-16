@@ -1,9 +1,11 @@
 #include <stdio.h>
 
-//Maximum cities 30
+        //Maximum cities 30
 
 void initializeDistances(int distance[][30],int numCities);
 void inputOrEditDistance(int distance[][30],int numCities);
+void displayDistanceTable(int distance[][30],int numCities);
+
 
 
 int main() {
@@ -13,7 +15,7 @@ int main() {
     int numCities;
     int choice;
 
-    printf("Enter number of cities:");
+    printf("Enter number of cities (1-30):");
     scanf("%d",&numCities);
 
     initializeDistances(distance,numCities);
@@ -32,13 +34,13 @@ int main() {
                 inputOrEditDistance(distance,numCities);
                 break;
             case 2:
+                displayDistanceTable(distance,numCities);
                 break;
-
             case 3:
-                printf("Exiting.\n");
+                printf("Exit.\n");
                 break;
             default:
-                printf("Invalid choice! \n");
+                printf("Invalid choice!\n");
         }
     } while (choice!= 3);
 
@@ -62,9 +64,9 @@ void initializeDistances(int distance[][30],int numCities){
 
 void inputOrEditDistance(int distance[][30], int numCities){
 
-    int city1, city2, d;
+    int city1,city2,d;
 
-    printf("\nEnter two city numbers (1 to %d): ",numCities);
+    printf("\nEnter two city numbers (1 to %d):",numCities);
     scanf("%d %d",&city1,&city2);
 
     if (city1 < 1 || city1 > numCities || city2 < 1 || city2 > numCities) {
@@ -81,3 +83,28 @@ void inputOrEditDistance(int distance[][30], int numCities){
         printf("Distance updated successfully!\n");
     }
 }
+
+
+void displayDistanceTable(int distance[][30],int numCities) {
+
+    printf("\n_ _ _ Distance Table _ _ _\n ");
+
+    for (int i = 0; i < numCities;i++)
+            printf("C%-3d",i + 1);
+            printf("\n");
+
+    for (int i = 0; i < numCities;i++){
+        printf("C%-3d ", i + 1);
+            for (int j = 0; j < numCities; j++) {
+                if (distance[i][j] == -1){
+                    printf("...  ");
+                }else{
+
+                printf("%-5d",distance[i][j]);
+                }
+            }
+        printf("\n");
+    }
+
+}
+
