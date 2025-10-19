@@ -1,14 +1,12 @@
 #include <stdio.h>
 
 #define MAX_CITIES 30
-
+#include "Functions.h"
 
 void addCity(char cities[][50], int *count);
 void renameCity(char cities[][50], int count);
 void removeCity(char cities[][50], int *count);
 void displayCities(char cities[][50], int count);
-
-
 
 
                                                     // Add new city
@@ -186,11 +184,8 @@ void displayCities(char cities[][50], int count) {
 
 
 
-                                    // main function
 
-
-int main() {
-
+int main(){
     char cities[MAX_CITIES][50];
     int count = 0;
     int choice;
@@ -225,4 +220,6 @@ int main() {
                     printf("Invalid choice!\n");
           }
     }while(choice!=5);
+
 }
+
