@@ -3,10 +3,10 @@
 #define MAX_CITIES 30
 #include "Functions.h"
 
-void addCity(char cities[][50], int *count);
-void renameCity(char cities[][50], int count);
-void removeCity(char cities[][50], int *count);
-void displayCities(char cities[][50], int count);
+void addCity(char cities[][50],int *count);
+void renameCity(char cities[][50],int count);
+void removeCity(char cities[][50],int *count);
+void displayCities(char cities[][50],int count);
 
 
                                                     // Add new city
