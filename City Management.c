@@ -1,7 +1,6 @@
 #include <stdio.h>
 
 #define MAX_CITIES 30
-#include "Functions.h"
 
 void addCity(char cities[][50],int *count);
 void renameCity(char cities[][50],int count);
