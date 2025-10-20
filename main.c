@@ -5,11 +5,16 @@
 
 
 void cityManagement();
+void distanceManagement();
+
+int numCities;
+
+
+                        //......................MAIN MENU......................
 
 int main() {
 
     char cities[30][30];
-    int numCities;
     int choice;
 
     do {
@@ -30,6 +35,7 @@ int main() {
                 cityManagement();
                 break;
             case 2:
+                distanceManagement();
                 break;
             case 3:
                 break;
@@ -55,33 +61,34 @@ int main() {
 
 
 
-void addCity(char cities[][50],int *count);
-void renameCity(char cities[][50],int count);
-void removeCity(char cities[][50],int *count);
-void displayCities(char cities[][50],int count);
+void addCity(char cities[][50],int *numCities);
+void renameCity(char cities[][50],int numCities);
+void removeCity(char cities[][50],int *numCities);
+void displayCities(char cities[][50],int numCities);
 
 
-                                                    // Add new city
 
-void addCity(char cities[][50], int *count) {
-    if (*count >= MAX_CITIES) {
-        printf("City list is full!\n");
+            // Add new city
+
+void addCity(char cities[][50], int *numCities) {
+    if (*numCities >= MAX_CITIES) {
+        printf("City list is full.\n");
     }else{
 
         char name[50];
         int unique = 1;
 
         printf("Enter city name: ");
-        scanf("%s", name);
+        scanf("%s",name);
 
 
 
-        for (int i = 0; i < *count; i++) {
+        for (int i = 0; i < *numCities; i++) {
 
             int notUnique = 1;
             int j = 0;
 
-            while (cities[i][j] != '\0' && name[j] != '\0') {
+            while (cities[i][j] != '\0' && name[j] != '\0'){
                 if (cities[i][j] != name[j]) {
                 notUnique = 0;
                 break;
@@ -104,11 +111,11 @@ void addCity(char cities[][50], int *count) {
         if (unique) {
             int k = 0;
             while (name[k] != '\0') {
-                cities[*count][k] = name[k];
+                cities[*numCities][k] = name[k];
                 k++;
             }
-            cities[*count][k] = '\0';
-            (*count)++;
+            cities[*numCities][k] = '\0';
+            (*numCities)++;
             printf("City added successfully!\n");
         }else{
         printf("City name already exists!\n");
@@ -117,12 +124,11 @@ void addCity(char cities[][50], int *count) {
 }
 
 
+                // Rename city
 
 
-                                                    // Rename city
-
-void renameCity(char cities[][50], int count) {
-    if(count == 0) {
+void renameCity(char cities[][50], int numCities) {
+    if(numCities == 0) {
         printf("No cities to rename.\n");
 
     }else{
@@ -132,7 +138,7 @@ void renameCity(char cities[][50], int count) {
         printf("Enter city number to rename : ");
         scanf("%d", &cityNumber);
 
-        if (cityNumber < 1 || cityNumber > count){
+        if (cityNumber < 1 || cityNumber > numCities){
             printf("Invalid city number.\n");
         }else{
 
@@ -141,7 +147,7 @@ void renameCity(char cities[][50], int count) {
             printf("Enter new name:");
             scanf("%s",newName);
 
-            for (int i = 0; i < count; i++) {
+            for (int i = 0; i < numCities; i++) {
                 int notUnique = 1;
                 int j = 0;
 
@@ -179,11 +185,12 @@ void renameCity(char cities[][50], int count) {
 
 }
 
-                                            // Remove city
+               // Remove city
 
-void removeCity(char cities[][50], int *count) {
 
-    if (*count == 0) {
+void removeCity(char cities[][50], int *numCities) {
+
+    if (*numCities == 0) {
         printf("No cities to remove.\n");
     }else{
 
@@ -191,11 +198,11 @@ void removeCity(char cities[][50], int *count) {
         printf("Enter city number to remove :");
         scanf("%d",&cityNumber);
 
-        if (cityNumber < 1 || cityNumber > *count) {
+        if (cityNumber < 1 || cityNumber > *numCities) {
                 printf("Invalid city number.\n");
         }else{
 
-            for (int i = cityNumber - 1; i < *count - 1; i++) {
+            for (int i = cityNumber - 1; i < *numCities - 1; i++) {
                 int j = 0;
                 while (cities[i + 1][j] != '\0') {
                 cities[i][j] = cities[i + 1][j];
@@ -204,25 +211,26 @@ void removeCity(char cities[][50], int *count) {
             cities[i][j] = '\0';
             }
 
-            (*count)--;
+            (*numCities)--;
             printf("City removed successfully!\n");
         }
     }
 }
 
 
-                                                // Display Cities
+
+                // Display Cities
 
 
-void displayCities(char cities[][50], int count) {
+void displayCities(char cities[][50], int numCities) {
 
-    if (count == 0) {
+    if (numCities == 0) {
         printf("No cities to display.\n");
     }else{
 
         printf("\n_ _ _ City List _ _ _\n");
 
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < numCities; i++) {
             int j = 0;
             printf("%d . ",i + 1);
             while(cities[i][j] != '\0') {
@@ -235,11 +243,10 @@ void displayCities(char cities[][50], int count) {
 }
 
 
-
+                // City Management function
 
 void cityManagement(){
     char cities[MAX_CITIES][50];
-    int count = 0;
     int choice;
 
     do{
@@ -255,16 +262,16 @@ void cityManagement(){
 
         switch (choice){
             case 1:
-                    addCity(cities,&count);
+                    addCity(cities,&numCities);
                     break;
             case 2:
-                    renameCity(cities,count);
+                    renameCity(cities,numCities);
                     break;
             case 3:
-                    removeCity(cities,&count);
+                    removeCity(cities,&numCities);
                     break;
             case 4:
-                    displayCities(cities,count);
+                    displayCities(cities,numCities);
                     break;
             case 5:
                     printf("Exit.");
@@ -276,4 +283,113 @@ void cityManagement(){
 
 }
 
+
+
+        //........................Distance Management..........................
+
+
+
+void initializeDistances(int distance[][MAX_CITIES],int numCities);
+void inputOrEditDistance(int distance[][MAX_CITIES],int numCities);
+void displayDistanceTable(int distance[][MAX_CITIES],int numCities);
+
+
+
+void distanceManagement(){
+
+    int distance[MAX_CITIES][30];
+    int choice;
+
+
+
+    do {
+        printf("\n_ _ _ Distance Management _ _ _\n\n");
+
+
+        initializeDistances(distance,numCities);
+
+        printf("1.Input or Edit Distance\n");
+        printf("2.Display Distance Table\n");
+        printf("3.Exit\n");
+
+        printf("Enter your choice:");
+        scanf("%d",&choice);
+
+        switch (choice) {
+            case 1:
+                inputOrEditDistance(distance,numCities);
+                break;
+            case 2:
+                displayDistanceTable(distance,numCities);
+                break;
+            case 3:
+                printf("Exit.\n");
+                break;
+            default:
+                printf("Invalid choice!\n");
+        }
+    } while (choice!= 3);
+
+}
+
+
+
+void initializeDistances(int distance[][30],int numCities){
+    for (int i = 0;i < numCities;i++) {
+        for (int j = 0;j < numCities;j++) {
+            if (i == j)
+                distance[i][j] = 0;
+            else
+                distance[i][j] = -1;
+        }
+    }
+}
+
+
+
+void inputOrEditDistance(int distance[][30], int numCities){
+
+    int city1,city2,d;
+
+    printf("\nEnter two city numbers (1 to %d):",numCities);
+    scanf("%d %d",&city1,&city2);
+
+    if (city1 < 1 || city1 > numCities || city2 < 1 || city2 > numCities) {
+        printf("Invalid city numbers.\n");
+    } else if (city1 == city2) {
+        printf("Distance from a city to itself is always 0.\n");
+    } else {
+        printf("Enter distance between city %d and city %d : ",city1,city2);
+        scanf("%d",&d);
+
+        distance[city1 - 1][city2 - 1] = d;
+        distance[city2 - 1][city1 - 1] = d;
+
+        printf("Distance updated successfully!\n");
+    }
+}
+
+
+void displayDistanceTable(int distance[][30],int numCities) {
+
+    printf("\n_ _ _ Distance Table _ _ _\n ");
+
+    for (int i = 0; i < numCities;i++)
+            printf("C%-3d",i + 1);
+            printf("\n");
+
+    for (int i = 0; i < numCities;i++){
+        printf("C%-3d ", i + 1);
+            for (int j = 0; j < numCities; j++) {
+                if (distance[i][j] == -1){
+                    printf("...  ");
+                }else{
+
+                printf("%-5d",distance[i][j]);
+                }
+            }
+        printf("\n");
+    }
+
+}
 

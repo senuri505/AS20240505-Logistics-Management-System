@@ -1,16 +1,16 @@
 #include <stdio.h>
 
-        //Maximum cities 30
+#define MAX_CITIES 30
 
-void initializeDistances(int distance[][30],int numCities);
-void inputOrEditDistance(int distance[][30],int numCities);
-void displayDistanceTable(int distance[][30],int numCities);
+void initializeDistances(int distance[][MAX_CITIES],int numCities);
+void inputOrEditDistance(int distance[][MAX_CITIES],int numCities);
+void displayDistanceTable(int distance[][MAX_CITIES],int numCities);
 
 
 
 int main() {
 
-    int distance[30][30];
+    int distance[MAX_CITIES][30];
 
     int numCities;
     int choice;
