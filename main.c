@@ -2,14 +2,42 @@
 #include <stdlib.h>
 
 #define MAX_CITIES 30
+int distanceTable[MAX_CITIES][MAX_CITIES];
+char cities[MAX_CITIES][50];
 
+int numCities;
 
 void cityManagement();
 void distanceManagement();
 void vehicleManagement();
+void deliveryRequestHandling();
+
+// City management functions
+void addCity(char cities[][50], int *numCities);
+void renameCity(char cities[][50], int numCities);
+void removeCity(char cities[][50], int *numCities);
+void displayCities(char cities[][50], int numCities);
+
+// Distance management functions
+void initializeDistances(int distance[][MAX_CITIES], int numCities);
+void inputOrEditDistance(int distance[][MAX_CITIES], int numCities);
+void displayDistanceTable(int distance[][MAX_CITIES], int numCities);
+
+// Vehicle management functions
+void displayVehicles();
+float calculateCost(int choice,float distance);
+
+// Delivery request handling
+void handleDeliveryRequest();
+
+// Vehicle data (global for reuse)
+char vehicles[3][20] = {"Van","Truck","Lorry"};
+int capacity[3] = {1000,5000,10000};
+int ratePerKm[3] = {30,40,80};
+int avgSpeed[3] = {60,50,45};
+int fuelEfficiency[3] = {12,6,4};
 
 
-int numCities;
 
 
                         //......................MAIN MENU......................
@@ -43,6 +71,7 @@ int main() {
                 vehicleManagement();
                 break;
             case 4:
+                handleDeliveryRequest();
                 break;
             case 5:
                 break;
@@ -401,68 +430,89 @@ void displayDistanceTable(int distance[][30],int numCities) {
 
         //........................Vehicle Management..........................
 
+void displayVehicles() {
+    printf("\nAvailable Vehicles:\n");
+    printf("Type\tCapacity(kg)\tRate/km\tSpeed\tEfficiency\n");
+    for (int i = 0; i < 3; i++) {
+        printf("%s\t%d\t\t%d\t%d\t%d\n",
+               vehicles[i], capacity[i], ratePerKm[i], avgSpeed[i], fuelEfficiency[i]);
+    }
+}
 
-void displayVehicles(char vehicles[][20],int capacity[],int ratePerKm[],int avgSpeed[],int fuelEfficiency[],int size);
-float calculateCost(int ratePerKm[],int choice,float distance);
+float calculateCost(int choice, float distance) {
+    return ratePerKm[choice - 1] * distance;
+}
 
-void vehicleManagement(){
-
-    char vehicles[3][20] = {"Van", "Truck", "Lorry"};
-    int capacity[3] = {1000,5000,10000};
-    int ratePerKm[3] = {30,40,80};
-    int avgSpeed[3] = {60,50,45};
-    int fuelEfficiency[3] = {12,6,4};
-
-    int size = 3;
+void vehicleManagement() {
     int choice;
     float distance;
-    float cost;
 
-    printf("_ _ _ VEHICLE MANAGEMENT _ _ _ \n");
+    printf("\n_ _ _ VEHICLE MANAGEMENT _ _ _\n");
+    displayVehicles();
 
-    displayVehicles(vehicles,capacity,ratePerKm,avgSpeed,fuelEfficiency,size);
-
-
-    printf("\nSelect Vehicle Type:\n");
-    printf("1.Van\n2.Truck\n3.Lorry\n");
-
-    printf("Enter your choice (1-3):");
-    scanf("%d",&choice);
-
-    if (choice < 1 || choice > size){
+    printf("\nEnter vehicle choice (1-3): ");
+    scanf("%d", &choice);
+    if (choice < 1 || choice > 3) {
         printf("Invalid choice.\n");
-    }else{
-
-    printf("Enter delivery distance (in km):");
-    scanf("%f",&distance);
-
-    cost=calculateCost(ratePerKm,choice,distance);
-
-    printf("\n\nVehicle Type: %s\n",vehicles[choice - 1]);
-    printf("Distance:%.2f km\n",distance);
-    printf("Rate per km: %d LKR\n",ratePerKm[choice - 1]);
-
-    printf("Estimated Delivery Cost: %.2f LKR\n", cost);
-
+        return;
     }
-    return 0;
+
+    printf("Enter distance (km): ");
+    scanf("%f", &distance);
+
+    float cost = calculateCost(choice, distance);
+    printf("\nVehicle: %s\nDistance: %.2f km\nCost: %.2f LKR\n",
+           vehicles[choice - 1], distance, cost);
 }
 
+// ======================================================
+//               DELIVERY REQUEST HANDLING
+// ======================================================
 
-
-void displayVehicles(char vehicles[][20],int capacity[],int ratePerKm[],int avgSpeed[],int fuelEfficiency[],int size){
-    printf("\nAvailable Vehicles:\n\n");
-    printf("Type\tCapacity(kg)\tRate/km(LKR)\tSpeed(km/h)\tEfficiency(km/l)\n\n");
-
-    for (int i = 0; i < size; i++) {
-        printf("%s\t%d\t\t%d\t\t%d\t\t%d\n",vehicles[i],capacity[i],ratePerKm[i],avgSpeed[i],fuelEfficiency[i]);
+void handleDeliveryRequest() {
+    if (numCities < 2) {
+        printf("Please add at least two cities first.\n");
+        return;
     }
+
+    int source,destination,vehicleType;
+    float weight;
+
+    printf("\nAvailable Cities:\n");
+    displayCities(cities,numCities);
+
+    printf("Enter Source City Index: ");
+    scanf("%d", &source);
+    printf("Enter Destination City Index: ");
+    scanf("%d", &destination);
+
+    if (source < 1 || destination < 1 || source > numCities || destination > numCities || source == destination) {
+        printf("Invalid city selection.\n");
+        return;
+    }
+
+    displayVehicles();
+    printf("\nSelect Vehicle Type (1=Van, 2=Truck, 3=Lorry): ");
+    scanf("%d", &vehicleType);
+
+    if (vehicleType < 1 || vehicleType > 3) {
+        printf("Invalid vehicle.\n");
+        return;
+    }
+
+    printf("Enter Weight of Delivery (kg): ");
+    scanf("%f", &weight);
+
+    if (weight > capacity[vehicleType - 1]) {
+        printf("Weight exceeds capacity (%d kg)\n", capacity[vehicleType - 1]);
+        return;
+    }
+
+    printf("\nDelivery Request Accepted!\n");
+    printf("From: %s\nTo: %s\nVehicle: %s\nWeight: %.2f kg\n",
+           cities[source - 1], cities[destination - 1], vehicles[vehicleType - 1], weight);
 }
 
-
-float calculateCost(int ratePerKm[],int choice,float distance){
-    float cost = distance*ratePerKm[choice-1];
-    return cost;
+void deliveryRequestHandling() {
+    handleDeliveryRequest();
 }
-
-
