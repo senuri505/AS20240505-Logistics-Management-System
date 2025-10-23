@@ -30,6 +30,7 @@ void cityManagement();
 void distanceManagement();
 void vehicleManagement();
 void deliveryRequestHandling();
+void findLeastCostRoute();
 
 // City management functions
 void addCity(char cities[][50],int *numCities);
@@ -93,6 +94,7 @@ int main() {
                 handleDeliveryRequest();
                 break;
             case 5:
+                findLeastCostRoute();
                 break;
             case 6:
                 break;
@@ -631,7 +633,72 @@ void deliveryRequestHandling() {
 
         //....................... Finding The Least-Cost Route (Least-Distance).................................................................................
 
+// ------------------- Least-Cost Route Finder -------------------
+
+void findLeastCostRoute() {
+
+    if (numCities < 2) {
+        printf("Please add at least two cities first.\n");
+        return;
+    }
+
+    if (numCities > 4) {
+        printf("Currently,least-cost route finder supports maximum 4 cities only.\n");
+        return;
+    }
+
+    printf("\nAvailable Cities:\n");
+    displayCities(cities, numCities);
+
+    int source,destination;
+
+    printf("Enter Source City Index:");
+    scanf("%d",&source);
+
+    printf("Enter Destination City Index:");
+    scanf("%d", &destination);
+
+    if (source < 1 || source > numCities || destination < 1 || destination > numCities || source == destination){
+        printf("Invalid city selection.\n");
+        return;
+    }
+
+
+    int intermediate[MAX_CITIES];
+    int intermediateCount = 0;
+
+    for (int i = 1;i<=numCities;i++) {
+        if (i != source && i != destination){
+            intermediate[intermediateCount++] = i;
+        }
+    }
+
+
+    int totalDistance(int path[],int len){
+        int dist = 0;
+        for (int i = 0; i < len - 1; i++){
+            int d = distanceTable[path[i] - 1][path[i+1] - 1];
+            if (d == -1) return -1;
+            dist += d;
+        }
+        return dist;
+    }
 
 
 
+    int bestDist = -1;
+    int bestPath[6];
+    permute(intermediate,0,intermediateCount-1,&bestDist,bestPath);
 
+    if (bestDist == -1){
+        printf("No valid path found.\n");
+        return;
+    }
+
+    printf("\nLeast-Cost Route (Least Distance) Found:\n");
+    for (int i = 0; i <= intermediateCount + 1; i++){
+        printf("%s", cities[bestPath[i]-1]);
+        if (i < intermediateCount + 1) printf("->");
+    }
+    printf("\nTotal Distance: %d km\n",bestDist);
+}
