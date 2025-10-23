@@ -2,11 +2,28 @@
 #include <stdlib.h>
 
 #define MAX_CITIES 30
+#define MAX_DELIVERIES 50
+
 
 //Global Variables
 int distanceTable[MAX_CITIES][MAX_CITIES];
 char cities[MAX_CITIES][50];
 int numCities;
+int deliveryCount = 0;
+
+// Global delivery record arrays
+char deliveryFrom[MAX_DELIVERIES][50];
+char deliveryTo[MAX_DELIVERIES][50];
+char deliveryVehicle[MAX_DELIVERIES][20];
+float deliveryWeight[MAX_DELIVERIES];
+float deliveryDistance[MAX_DELIVERIES];
+float deliveryCostRecord[MAX_DELIVERIES];
+float deliveryFuelCost[MAX_DELIVERIES];
+float deliveryTotalCost[MAX_DELIVERIES];
+float deliveryProfit[MAX_DELIVERIES];
+float deliveryCustomerCharge[MAX_DELIVERIES];
+float deliveryTime[MAX_DELIVERIES];
+
 
 //Main functions
 void cityManagement();
@@ -464,7 +481,7 @@ void vehicleManagement() {
 }
 
 
-        //.......................DELIVERY REQUEST HANDLING.................................................................
+        //.......................DELIVERY REQUEST HANDLING MANAGEMENT.................................................................
 
 
 
@@ -543,6 +560,8 @@ void handleDeliveryRequest() {
     float customerCharge = totalCost + profit;   // g. Final charge to customer
 
     // ---------------- OUTPUT ----------------
+        printf("\nDelivery Request Accepted!\n\n");
+
 
     printf("\n-------Delivery Summary--------\n");
     printf("From:       %s\n", cities[source - 1]);
@@ -559,10 +578,60 @@ void handleDeliveryRequest() {
     printf("Customer Charge     : %.2f LKR\n",customerCharge);
     printf("Estimated Time      : %.2f hours\n\n",time);
 
-    printf("\nDelivery Request Accepted!\n");
+
+
+     // ---------------- RECORD DELIVERY ----------------
+
+
+    if(deliveryCount < MAX_DELIVERIES){
+    int i = deliveryCount;
+    int k;
+
+
+    for(k=0; cities[source-1][k]!='\0'; k++){
+        deliveryFrom[i][k] = cities[source-1][k];
+    }
+            deliveryFrom[i][k] = '\0';
+
+
+
+    for(k=0; cities[destination-1][k]!='\0'; k++){
+        deliveryTo[i][k] = cities[destination-1][k];
+    }
+            deliveryTo[i][k] = '\0';
+
+
+    for(k=0; vehicles[vehicleType-1][k]!='\0'; k++){
+        deliveryVehicle[i][k] = vehicles[vehicleType-1][k];
+    }
+            deliveryVehicle[i][k] = '\0';
+
+
+    deliveryWeight[i] = W;
+    deliveryDistance[i] = D;
+    deliveryCostRecord[i] = deliveryCost;
+    deliveryFuelCost[i] = fuelCost;
+    deliveryTotalCost[i] = totalCost;
+    deliveryProfit[i] = profit;
+    deliveryCustomerCharge[i] = customerCharge;
+    deliveryTime[i] = time;
+
+    deliveryCount++;
+}
 
 }
 
 void deliveryRequestHandling() {
     handleDeliveryRequest();
 }
+
+
+
+
+
+        //....................... Finding The Least-Cost Route (Least-Distance).................................................................................
+
+
+
+
+
