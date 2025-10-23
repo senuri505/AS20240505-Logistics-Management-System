@@ -566,24 +566,30 @@ void handleDeliveryRequest() {
 
     float customerCharge = totalCost + profit;   // g. Final charge to customer
 
+
+
     // ---------------- OUTPUT ----------------
+
+
         printf("\nDelivery Request Accepted!\n\n");
 
-
-    printf("\n-------Delivery Summary--------\n");
-    printf("From:       %s\n", cities[source - 1]);
-    printf("To:         %s\n", cities[destination - 1]);
-    printf("Vehicle:    %s\n", vehicles[vehicleType - 1]);
-    printf("Weight:     %.2f kg\n", W);
-    printf("Distance:   %.2f km\n", D);
-    printf("Speed:      %d km/h\n\n", avgSpeed[vehicleType - 1]);
-    printf("Delivery Cost          : %.2f LKR\n",deliveryCost);
-    printf("Fuel Used           : %.2f liters\n",fuelUsed);
+    printf("======================================================\n");
+    printf("DELIVERY COST ESTIMATION\n");
+    printf("------------------------------------------------------\n");
+    printf("From: %s\n", cities[source - 1]);
+    printf("To: %s\n", cities[destination - 1]);
+    printf("Minimum Distance : %.2f km\n", D);
+    printf("Vehicle: %s\n", vehicles[vehicleType - 1]);
+    printf("Weight: %.2f kg\n",W);
+    printf("------------------------------------------------------\n");
+    printf("Delivery Cost       : %.2f LKR\n",deliveryCost);
+    printf("Fuel Used           : %.2f L\n",fuelUsed);
     printf("Fuel Cost           : %.2f LKR\n",fuelCost);
-    printf("Total Cost          : %.2f LKR\n",totalCost);
+    printf("Operational Cost    : %.2f LKR\n",totalCost);
     printf("Profit (25%%)       : %.2f LKR\n",profit);
     printf("Customer Charge     : %.2f LKR\n",customerCharge);
     printf("Estimated Time      : %.2f hours\n\n",time);
+    printf("======================================================\n\n");
 
 
 
