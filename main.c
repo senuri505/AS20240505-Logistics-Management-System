@@ -50,6 +50,11 @@ float calculateCost(int choice,float distance);
 // Delivery request handling
 void handleDeliveryRequest();
 
+// Least-Cost Route Finder
+void permute(int *arr,int l,int r,int source,int destination,int *bestDist,int bestPath[],int intermediateCount);
+int totalDistance(int path[], int len);
+
+
 // Vehicle data (global for reuse)
 char vehicles[3][20] = {"Van","Truck","Lorry"};
 int capacity[3] = {1000,5000,10000};
@@ -648,7 +653,7 @@ void findLeastCostRoute() {
     }
 
     printf("\nAvailable Cities:\n");
-    displayCities(cities, numCities);
+    displayCities(cities,numCities);
 
     int source,destination;
 
@@ -656,7 +661,7 @@ void findLeastCostRoute() {
     scanf("%d",&source);
 
     printf("Enter Destination City Index:");
-    scanf("%d", &destination);
+    scanf("%d",&destination);
 
     if (source < 1 || source > numCities || destination < 1 || destination > numCities || source == destination){
         printf("Invalid city selection.\n");
@@ -674,21 +679,11 @@ void findLeastCostRoute() {
     }
 
 
-    int totalDistance(int path[],int len){
-        int dist = 0;
-        for (int i = 0; i < len - 1; i++){
-            int d = distanceTable[path[i] - 1][path[i+1] - 1];
-            if (d == -1) return -1;
-            dist += d;
-        }
-        return dist;
-    }
-
-
-
     int bestDist = -1;
     int bestPath[6];
-    permute(intermediate,0,intermediateCount-1,&bestDist,bestPath);
+
+    permute(intermediate, 0, intermediateCount - 1, source, destination, &bestDist, bestPath, intermediateCount);
+
 
     if (bestDist == -1){
         printf("No valid path found.\n");
@@ -701,4 +696,52 @@ void findLeastCostRoute() {
         if (i < intermediateCount + 1) printf("->");
     }
     printf("\nTotal Distance: %d km\n",bestDist);
+
+
+}
+
+
+
+    int totalDistance(int path[],int len){
+        int dist = 0;
+        for (int i = 0; i < len - 1; i++){
+            int d = distanceTable[path[i] - 1][path[i+1] - 1];
+            if (d == -1) return -1;
+            dist += d;
+        }
+        return dist;
+    }
+
+
+
+    void permute(int *arr, int l, int r, int source, int destination, int *bestDist, int bestPath[], int intermediateCount){
+    if (l == r){
+        int path[MAX_CITIES];
+        int idx = 0;
+        path[idx++] = source;
+
+        for (int i = 0; i <= r; i++){
+            path[idx++] = arr[i];
+        }
+
+        path[idx++] = destination;
+
+        int dist = totalDistance(path, idx);
+        if (dist != -1 && (dist < *bestDist || *bestDist == -1)){
+            *bestDist = dist;
+            for (int j = 0; j < idx; j++) bestPath[j] = path[j];
+        }
+    } else {
+        for(int i = l; i <= r; i++){
+            int temp = arr[l];
+            arr[l] = arr[i];
+            arr[i] = temp;
+
+            permute(arr, l + 1, r, source, destination, bestDist, bestPath, intermediateCount);
+
+            temp = arr[l];
+            arr[l] = arr[i];
+            arr[i] = temp;
+        }
+    }
 }
