@@ -31,6 +31,7 @@ void distanceManagement();
 void vehicleManagement();
 void deliveryRequestHandling();
 void findLeastCostRoute();
+void performanceReports();
 
 // City management functions
 void addCity(char cities[][50],int *numCities);
@@ -102,6 +103,7 @@ int main() {
                 findLeastCostRoute();
                 break;
             case 6:
+                performanceReports();
                 break;
             case 7:
                 printf("Exit\n");
@@ -644,7 +646,6 @@ void deliveryRequestHandling() {
 
         //....................... Finding The Least-Cost Route (Least-Distance).................................................................................
 
-// ------------------- Least-Cost Route Finder -------------------
 
 void findLeastCostRoute() {
 
@@ -750,4 +751,51 @@ void findLeastCostRoute() {
             arr[i] = temp;
         }
     }
+}
+
+
+
+            // ..............................................Performance Reports...............................................................................
+
+
+void performanceReports() {
+
+    if (deliveryCount == 0) {
+        printf("\nNo deliveries completed yet.\n");
+        return;
+    }
+
+
+    float totalDistance = 0;
+    float totalTime = 0;
+    float totalRevenue = 0;
+    float totalProfit = 0;
+
+    int longest = 0,shortest = 0;
+
+    for (int i = 0; i < deliveryCount; i++) {
+        totalDistance += deliveryDistance[i];
+        totalTime += deliveryTime[i];
+        totalRevenue += deliveryCustomerCharge[i];
+        totalProfit += deliveryProfit[i];
+
+        if (deliveryDistance[i] > deliveryDistance[longest])
+            longest = i;
+        if (deliveryDistance[i] < deliveryDistance[shortest])
+            shortest = i;
+    }
+
+
+    printf("\n===== PERFORMANCE REPORT =====\n");
+    printf("Total Deliveries Completed : %d\n", deliveryCount);
+    printf("Total Distance Covered     : %.2f km\n", totalDistance);
+    printf("Average Delivery Time      : %.2f hours\n", totalTime / deliveryCount);
+    printf("Total Revenue              : %.2f LKR\n", totalRevenue);
+    printf("Total Profit               : %.2f LKR\n", totalProfit);
+    printf("Longest Route Completed    : %s -> %s (%.2f km)\n",
+
+           deliveryFrom[longest], deliveryTo[longest], deliveryDistance[longest]);
+    printf("Shortest Route Completed   : %s -> %s (%.2f km)\n",
+           deliveryFrom[shortest], deliveryTo[shortest], deliveryDistance[shortest]);
+    printf("===============================\n\n");
 }
