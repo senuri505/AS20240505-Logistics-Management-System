@@ -1,77 +1,109 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAX_CITIES 30
-#define MAX_DELIVERIES 50
+#define MAX_CITIES 30           // Maximum number of cities that can be stored
+#define MAX_DELIVERIES 50       // Maximum number of delivery records that can be handled
 
 
-//Global Variables
-int distanceTable[MAX_CITIES][MAX_CITIES];
-char cities[MAX_CITIES][50];
-int numCities;
-int deliveryCount = 0;
+        //.................................Global Variables..........................................
 
-// Global delivery record arrays
-char deliveryFrom[MAX_DELIVERIES][50];
-char deliveryTo[MAX_DELIVERIES][50];
-char deliveryVehicle[MAX_DELIVERIES][20];
-float deliveryWeight[MAX_DELIVERIES];
-float deliveryDistance[MAX_DELIVERIES];
-float deliveryCostRecord[MAX_DELIVERIES];
-float deliveryFuelCost[MAX_DELIVERIES];
-float deliveryTotalCost[MAX_DELIVERIES];
-float deliveryProfit[MAX_DELIVERIES];
-float deliveryCustomerCharge[MAX_DELIVERIES];
-float deliveryTime[MAX_DELIVERIES];
-
-
-//Main functions
-void cityManagement();
-void distanceManagement();
-void vehicleManagement();
-void deliveryRequestHandling();
-void findLeastCostRoute();
-void performanceReports();
-
-// City management functions
-void addCity(char cities[][50],int *numCities);
-void renameCity(char cities[][50],int numCities);
-void removeCity(char cities[][50],int *numCities);
-void displayCities(char cities[][50],int numCities);
-
-// Distance management functions
-void initializeDistances(int distance[][MAX_CITIES],int numCities);
-void inputOrEditDistance(int distance[][MAX_CITIES],int numCities);
-void displayDistanceTable(int distance[][MAX_CITIES],int numCities);
-
-// Vehicle management functions
-void displayVehicles();
-float calculateCost(int choice,float distance);
-
-// Delivery request handling
-void handleDeliveryRequest();
-
-// Least-Cost Route Finder
-void permute(int *arr,int l,int r,int source,int destination,int *bestDist,int bestPath[],int intermediateCount);
-int totalDistance(int path[], int len);
-
-
-// Vehicle data (global for reuse)
-char vehicles[3][20] = {"Van","Truck","Lorry"};
-int capacity[3] = {1000,5000,10000};
-int ratePerKm[3] = {30,40,80};
-int avgSpeed[3] = {60,50,45};
-int fuelEfficiency[3] = {12,6,4};
+int distanceTable[MAX_CITIES][MAX_CITIES];      // Distance table storing distances between cities
+char cities[MAX_CITIES][50];          // Array to store city names
+int numCities;              // Number of cities currently in the system
+int deliveryCount = 0;      // Number of deliveries recorded so far
 
 
 
+        //..............................Global delivery record arrays................................
 
-                        //......................MAIN MENU......................
+
+char deliveryFrom[MAX_DELIVERIES][50];      // Source city names for deliveries
+char deliveryTo[MAX_DELIVERIES][50];        // Destination city names for deliveries
+char deliveryVehicle[MAX_DELIVERIES][20];   // Vehicle type used for each delivery
+float deliveryWeight[MAX_DELIVERIES];       // Weight of goods for each delivery
+float deliveryDistance[MAX_DELIVERIES];     // Distance of each delivery route
+float deliveryCostRecord[MAX_DELIVERIES];   // Basic cost for each delivery (without fuel)
+float deliveryFuelCost[MAX_DELIVERIES];     // Fuel cost for each delivery
+float deliveryTotalCost[MAX_DELIVERIES];    // // Stores total cost for each delivery
+float deliveryProfit[MAX_DELIVERIES];       // Profit gained from each delivery
+float deliveryCustomerCharge[MAX_DELIVERIES];       // Customer charge amount for each delivery
+float deliveryTime[MAX_DELIVERIES];         // Estimated time taken for each delivery (in hours)
+
+
+        //...............................Main functions................................................
+
+void cityManagement();              //City Management system
+void distanceManagement();          //Distance Management system
+void vehicleManagement();           //Vehicle Management system
+void deliveryRequestHandling();     //Delivery request handling system
+void findLeastCostRoute();          //Find Least-Cost Route system
+void performanceReports();          //Performance Report
+
+
+
+        //................................City management functions....................................
+
+
+void addCity(char cities[][50],int *numCities);          // Add new city
+void renameCity(char cities[][50],int numCities);       // Rename existing city
+void removeCity(char cities[][50],int *numCities);      // Delete a city
+void displayCities(char cities[][50],int numCities);    // Display all cities
+
+
+
+        //.................................Distance management functions...........................................
+
+
+void initializeDistances(int distance[][MAX_CITIES],int numCities);     // Initialize distance table
+void inputOrEditDistance(int distance[][MAX_CITIES],int numCities);     // Enter or edit distances
+void displayDistanceTable(int distance[][MAX_CITIES],int numCities);    // Display distance matrix
+
+
+
+        //....................................Vehicle management functions...............................................
+
+
+void displayVehicles();         // Show available vehicle types
+float calculateCost(int choice,float distance);         // Calculate cost based on vehicle and distance
+
+
+
+
+        //.....................................Delivery request handling.............................................
+
+
+void handleDeliveryRequest();      // Manage new delivery request input and processing
+
+
+
+        //.......................................Least-Cost Route Finder.............................................
+.
+
+void permute(int *arr,int l,int r,int source,int destination,int *bestDist,int bestPath[],int intermediateCount);       // Generate all possible routes
+int totalDistance(int path[], int len);             // Calculate total distance of a path
+
+
+        //.........................................Vehicle data (global for reuse)...............................................
+
+
+char vehicles[3][20] = {"Van","Truck","Lorry"};     // Available vehicle types
+int capacity[3] = {1000,5000,10000};        // Maximum carrying capacity of each vehicle (in kg)
+int ratePerKm[3] = {30,40,80};          // Cost rate per kilometer for each vehicle
+int avgSpeed[3] = {60,50,45};           // Average speed of each vehicle (in km/h)
+int fuelEfficiency[3] = {12,6,4};       // Fuel efficiency of each vehicle (km per liter)
+
+
+
+
+
+
+        //................................................................MAIN MENU........................................................................
+
 
 int main() {
-    numCities = 0;
+    numCities = 0;      // Initialize the number of cities to 0 at the start
 
-    int choice;
+    int choice;     // Variable to store user's menu choice
 
     do {
         printf("\n_ _ _ Logistics Management System _ _ _\n");
@@ -117,7 +149,7 @@ int main() {
 
 
 
-        //........................City Management..........................
+        //............................................................City Management.....................................................................
 
 
 
@@ -127,8 +159,8 @@ void removeCity(char cities[][50],int *numCities);
 void displayCities(char cities[][50],int numCities);
 
 
+                // Add new city
 
-            // Add new city
 
 void addCity(char cities[][50], int *numCities) {
     if (*numCities >= MAX_CITIES) {
@@ -182,6 +214,7 @@ void addCity(char cities[][50], int *numCities) {
         }
     }
 }
+
 
 
                 // Rename city
@@ -344,7 +377,8 @@ void cityManagement(){
 
 
 
-        //........................Distance Management..........................
+        //..................................................Distance Management................................................................
+
 
 
 
@@ -451,8 +485,10 @@ void displayDistanceTable(int distance[][MAX_CITIES],int numCities) {
 
 
 
-
         //........................Vehicle Management..........................
+
+
+
 
 void displayVehicles() {
     printf("\nAvailable Vehicles:\n");
@@ -475,7 +511,7 @@ void vehicleManagement() {
     displayVehicles();
 
     printf("\nEnter vehicle choice (1-3): ");
-    scanf("%d", &choice);
+    scanf("%d",&choice);
     if (choice < 1 || choice > 3) {
         printf("Invalid choice.\n");
         return;
@@ -486,11 +522,13 @@ void vehicleManagement() {
 
     float cost = calculateCost(choice, distance);
     printf("\nVehicle: %s\nDistance: %.2f km\nCost: %.2f LKR\n",
-           vehicles[choice - 1], distance, cost);
+           vehicles[choice - 1], distance,cost);
 }
 
 
-        //.......................DELIVERY REQUEST HANDLING MANAGEMENT.................................................................
+
+
+        //.................................................DELIVERY REQUEST HANDLING MANAGEMENT.................................................................
 
 
 
@@ -644,7 +682,7 @@ void deliveryRequestHandling() {
 
 
 
-        //....................... Finding The Least-Cost Route (Least-Distance).................................................................................
+        //...................................Finding The Least-Cost Route (Least-Distance).................................................................................
 
 
 void findLeastCostRoute() {
@@ -786,7 +824,7 @@ void performanceReports() {
     }
 
 
-    printf("\n===== PERFORMANCE REPORT =====\n");
+    printf("\n===== PERFORMANCE REPORT =========================\n");
     printf("Total Deliveries Completed : %d\n", deliveryCount);
     printf("Total Distance Covered     : %.2f km\n", totalDistance);
     printf("Average Delivery Time      : %.2f hours\n", totalTime / deliveryCount);
@@ -797,5 +835,5 @@ void performanceReports() {
            deliveryFrom[longest], deliveryTo[longest], deliveryDistance[longest]);
     printf("Shortest Route Completed   : %s -> %s (%.2f km)\n",
            deliveryFrom[shortest], deliveryTo[shortest], deliveryDistance[shortest]);
-    printf("===============================\n\n");
+    printf("=====================================================\n\n");
 }
